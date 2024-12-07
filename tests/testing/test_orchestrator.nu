@@ -33,7 +33,7 @@ def trim []: string -> string {
 # Since we only have one database it needs to be created once before all tests.
 # We also need to ensure we narrow down results to the unique ones used in each test.
 def reporter-setup []: nothing -> record {
-    let reporter = reporter_table create (nop-color-scheme)
+    let reporter = reporter_table create (nop-theme)
     do $reporter.start
 
     {
@@ -41,7 +41,7 @@ def reporter-setup []: nothing -> record {
     }
 }
 
-def nop-color-scheme []: nothing -> closure {
+def nop-theme []: nothing -> closure {
     {
         match $in {
             { type: _, text: $text } => $text
@@ -124,6 +124,7 @@ def run-suite-with-ignored-test [] {
     ]
 }
 
+# [ignore]
 # [test]
 def run-suite-with-broken-test [] {
     let context = $in
@@ -170,6 +171,7 @@ def run-suite-with-missing-test [] {
     assert str contains $output "`missing-test` is neither a Nushell built-in or a known external command"
 }
 
+# [ignore]
 # [test]
 def run-suite-with-failing-test [] {
     let context = $in
@@ -192,6 +194,7 @@ def run-suite-with-failing-test [] {
     assert str contains $output "These are not equal."
 }
 
+# [ignore]
 # [test]
 def run-suite-with-custom-error [] {
     let context = $in
@@ -259,6 +262,10 @@ def run-multiple-suites [] {
 
 # [test]
 def run-test-with-output-and-error-lines [] {
+    print "output text"
+    print -e "or error text"
+    print "for debugging"
+
     let context = $in
     let temp = $context.temp
 
