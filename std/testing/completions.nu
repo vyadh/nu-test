@@ -47,3 +47,23 @@ export def "nu-complete formatter" []: nothing -> record<options: record, comple
         ]
     }
 }
+
+export def "nu-complete suites" [context: string]: nothing -> list<string> {
+    use discover.nu
+
+    # todo use a regex match to narrow the suites using 'like'
+    # todo might be worth moving filtering to discovery to help share logic
+    # todo and split filtering of suites and tests into separate functions
+
+    # todo need to process command line arguments to pick up the arguments:
+    # --match-suites (anything specified)
+    # --path (to use with list-files)
+
+    # todo we should also use this --match-suites to filter the tests doing completion for --match-tests
+
+    let suites = discover list-files "."
+        | each { path parse | get stem }
+
+    #print ($context | split words)
+    $suites
+}
